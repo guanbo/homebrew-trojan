@@ -6,6 +6,7 @@ class Trojan < Formula
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "openssl@1.1"
+  depends_on "privoxy"
   depends_on "python" => :test
   depends_on "coreutils" => :test
 
