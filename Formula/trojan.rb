@@ -16,8 +16,9 @@ class Trojan < Formula
     system "make", "install"
   end
 
-  do post_install
-    system "cat", "listen-address 0.0.0.0:1081
+  def post_install
+    File.open(Formula["privoxy"].etc/"privoxy/config", "w") do |f|
+      f << "listen-address 0.0.0.0:1081
 toggle  1
 enable-remote-toggle 1
 enable-remote-http-toggle 1
@@ -40,17 +41,13 @@ forward         [FD00::/8]       .
 forward-socks5 / 0.0.0.0:1080 .
 
 # Put user privoxy config line in this file.
-# Ref: https://www.privoxy.org/user-manual/index.html", ">", pkgetc/"privoxy.config"
+# Ref: https://www.privoxy.org/user-manual/index.html"
+    end
   end
 
   service do
      run [opt_bin/"trojan", etc/"trojan/config.json"]
      run_type :immediate
      keep_alive true
-  end
-
-  service do
-    run [Formula["privoxy"].opt_sbin/"privoxy", pkgetc/"privoxy.config"]
-    keep_alive true
   end
 end
